@@ -3,7 +3,6 @@ import axiosInstance from "../app/axios.js";
 const event = (socket) => {
 
 
-    socket.broadcast.emit("message", "welcome");
 
     socket.on('message', data => {
         console.log(data)
