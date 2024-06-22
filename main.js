@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
-    console.log('connected', socket)
+    console.log('connected')
     io.emit("message", "welcome");
 
     event(socket)
