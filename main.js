@@ -34,6 +34,8 @@ io.on("connection", async (socket) => {
     log(authToken)
 
     if (authToken === undefined) {
+        log('Disconnected, for no authToken')
+
         socket.disconnect()
     }
 
