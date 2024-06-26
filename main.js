@@ -18,7 +18,14 @@ app.options('*', cors());
 const httpServer = createServer(app);
 const port = process.env.PORT || 3000;
 
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        // or with an array of origins
+        // origin: ["https://my-frontend.com", "https://my-other-frontend.com", "http://localhost:3000"],
+        credentials: true
+    }
+});
 
 io.on("connection", async (socket) => {
 
