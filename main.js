@@ -69,6 +69,7 @@ io.on("connection", async (socket) => {
 
         }
     }).catch(e => {
+        log('Error', e.message)
         socket.disconnect()
 
     })
