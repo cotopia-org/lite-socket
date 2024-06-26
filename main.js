@@ -5,6 +5,7 @@ import 'dotenv/config.js'
 import event from "./src/events.js";
 import router from "./src/router.js";
 import axiosInstance from "./app/axios.js";
+import {log} from "./app/logger.js";
 
 
 const app = express();
@@ -17,32 +18,55 @@ const port = process.env.PORT || 3000;
 
 const io = new Server(httpServer);
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
 
 
-    // const authToken = socket.handshake.query.userToken
-    // axiosInstance.get('/users/me', {'headers': {'Authorization': `Bearer ${authToken}`}}).then(res => {
-    //
-    //
-    //     const data = res.data.data
-    //
-    //     console.log('Connected', res.data.data.username)
-    //
-    //
-    //     if (data.workspaces.length > 0) {
-    //         data.workspaces.forEach(w => {
-    //             socket.join(`workspace-${w.id}`);
-    //
-    //         })
-    //
-    //     }
-    // })
+    const authToken = socket.handshake.query.userToken
+    log(authToken)
+
+    if (authToken === undefined) {
+        socket.disconnect()
+    }
+
+    await axiosInstance.get('/users/me', {'headers': {'Authorization': `Bearer ${authToken}`}}).then(res => {
+
+
+        const data = res.data.data
+
+        log('Connected', res.data.data.username)
+
+
+        if (data.workspaces.length > 0) {
+            data.workspaces.forEach(w => {
+                socket.join(`workspace-${w.id}`);
+
+            })
+
+        }
+
+        if (data.directs.length > 0) {
+            data.directs.forEach(r => {
+                socket.join(`room-${r.id}`);
+
+            })
+
+        }
+
+        if (data.room !== null) {
+            socket.join(`room-${data.room.id}`);
+
+
+        }
+    }).catch(e => {
+        socket.disconnect()
+
+    })
     // console.log('Here')
-    console.log('CONNECTED')
-
+    log('Connected')
+    log('Rooms', socket.rooms)
 
     socket.on("disconnect", () => {
-        console.log('Disconnected')
+        log('Disconnected')
     });
 
 
