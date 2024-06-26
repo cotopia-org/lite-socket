@@ -6,12 +6,13 @@ import event from "./src/events.js";
 import router from "./src/router.js";
 import axiosInstance from "./app/axios.js";
 import {log} from "./app/logger.js";
-
+import cors from 'cors'
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cors())
 
 const httpServer = createServer(app);
 const port = process.env.PORT || 3000;
