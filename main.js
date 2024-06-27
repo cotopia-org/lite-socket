@@ -16,7 +16,7 @@ app.use(cors())
 app.options('*', cors());
 
 const httpServer = createServer(app);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3010;
 
 const io = new Server(httpServer, {
     cors: {
@@ -29,6 +29,7 @@ const io = new Server(httpServer, {
 
 io.on("connection", async (socket) => {
 
+    log('Here')
 
     const authToken = socket.handshake.query.userToken
     log(authToken)

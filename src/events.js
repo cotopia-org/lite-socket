@@ -3,8 +3,7 @@ import axiosInstance from "../app/axios.js";
 const event = (socket) => {
 
 
-
-    socket.on('message', data => {
+    socket.on('roomMessages', data => {
         console.log(data)
 
         //
