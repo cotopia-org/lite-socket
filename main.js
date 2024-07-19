@@ -73,6 +73,7 @@ io.on("connection", async (socket) => {
 
 
         }).catch(e => {
+            log('Error', e)
             log('Error', e.message)
             socket.disconnect()
 
@@ -80,7 +81,6 @@ io.on("connection", async (socket) => {
 
 
         // console.log('Here')
-        log('Connected')
         log('Rooms', socket.rooms)
 
         socket.on("disconnect", () => {
