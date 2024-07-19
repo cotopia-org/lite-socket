@@ -27,9 +27,6 @@ const io = new Server(httpServer, {
 
 io.on("connection", async (socket) => {
 
-    log('Here')
-
-    console.log(socket.id)
 
     const authToken = socket.handshake.query.userToken
     log(authToken)
