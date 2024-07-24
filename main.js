@@ -82,6 +82,7 @@ io.on("connection", async (socket) => {
 
         socket.on("disconnect", () => {
             log('Disconnected')
+            disconnected(authToken)
         });
 
 
@@ -91,6 +92,11 @@ io.on("connection", async (socket) => {
 
 })
 ;
+
+
+const disconnected = async (authToken) => {
+    await axiosInstance.get('/disconnected', {'headers': {'Authorization': `Bearer ${authToken}`}})
+}
 
 
 router(app, io)
