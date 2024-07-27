@@ -13,7 +13,7 @@ const router = (router, io, socket) => {
 
         if (req.body.eventName === 'joinedRoom') {
             await socket.join(`room-${req.body.data}`);
-            log('Rooms', socket.rooms)
+            log(socket, socket.rooms, req.body.data)
 
 
         } else {
