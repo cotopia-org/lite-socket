@@ -28,7 +28,10 @@ const router = (router, io, sockets) => {
 
             const user_id = req.body.data.user_id
             const room_id = req.body.data.room_id
-            sockets[user_id].join(`room-${room_id}`)
+            if (Object.keys(sockets).includes(user_id)) {
+                sockets[user_id].join(`room-${room_id}`)
+
+            }
 
 
         } else {
