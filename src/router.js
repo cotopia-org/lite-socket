@@ -6,13 +6,13 @@ const router = (router, io, socket) => {
     })
 
 
-    router.post('/emit', (req, res) => {
+    router.post('/emit', async (req, res) => {
 
 
         log(req.body)
 
         if (req.body.eventName === 'joinedRoom') {
-            socket.join(`room-${req.body.data}`);
+            await socket.join(`room-${req.body.data}`);
             log('Rooms', socket.rooms)
 
 
