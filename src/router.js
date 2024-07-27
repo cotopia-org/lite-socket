@@ -17,7 +17,17 @@ const router = (router, io, sockets) => {
 
     })
     router.get('/sockets', (req, res) => {
-        return res.json(Object.keys(sockets))
+
+        const data = []
+        Object.keys(sockets).map(key => {
+            data.push({
+                id: sockets[key].user_id,
+                username: sockets[key].username,
+                rooms: Array.from(sockets[key].rooms),
+            })
+        })
+
+        return res.json(data)
     })
 
     router.post('/emit', async (req, res) => {
