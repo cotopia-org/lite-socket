@@ -13,6 +13,8 @@ const router = (router, io, socket) => {
 
         if (req.body.eventName === 'joinedRoom') {
             socket.join(`room-${req.body.data}`);
+            log('Rooms', socket.rooms)
+
 
         } else {
             io.to(req.body.channel).emit(req.body.eventName, req.body.data);
