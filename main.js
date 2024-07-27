@@ -25,11 +25,13 @@ const io = new Server(httpServer, {
     }
 });
 
+
+let sockets = {}
+
 io.on("connection", async (socket) => {
 
 
     const authToken = socket.handshake.query.userToken
-    log(authToken)
 
     if (authToken === undefined) {
         log('Disconnected, for no authToken')
@@ -43,7 +45,13 @@ io.on("connection", async (socket) => {
 
             const data = res.data.data
 
-            log('Connected', res.data.data.username)
+
+            socket.user_id = data.id
+            socket.username = data.username
+            sockets[res.data.data.id] = socket
+
+
+            log('Connected', data.username)
 
 
             if (data.workspaces.length > 0) {
@@ -77,22 +85,23 @@ io.on("connection", async (socket) => {
         })
 
 
-        // console.log('Here')
-        log('Rooms', socket.rooms)
-
         socket.on("disconnect", () => {
-            log('Disconnected')
+            log('Disconnected', socket.username)
             disconnected(authToken)
+
+            delete sockets[socket.user_id]
+
+
         });
 
 
         event(socket)
     }
 
-    router(app, io, socket)
 
 })
-;
+
+router(app, io, sockets)
 
 
 const disconnected = async (authToken) => {
