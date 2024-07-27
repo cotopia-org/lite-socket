@@ -89,6 +89,7 @@ io.on("connection", async (socket) => {
         event(socket)
     }
 
+    router(app, io, socket)
 
 })
 ;
@@ -98,8 +99,6 @@ const disconnected = async (authToken) => {
     await axiosInstance.get('/disconnected', {'headers': {'Authorization': `Bearer ${authToken}`}})
 }
 
-
-router(app, io)
 
 console.log(`Server listen on ${port}`)
 httpServer.listen(port);

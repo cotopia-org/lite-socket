@@ -1,6 +1,6 @@
 import {log} from "../app/logger.js";
 
-const router = (router, io) => {
+const router = (router, io, socket) => {
     router.get('/', (req, res) => {
         return res.json('Chat is ready')
     })
@@ -10,7 +10,14 @@ const router = (router, io) => {
 
 
         log(req.body)
-        io.to(req.body.channel).emit(req.body.eventName, req.body.data);
+
+        if (req.body.eventName === 'joinedRoom') {
+            socket.join(`room-${req.body.data}`);
+
+        } else {
+            io.to(req.body.channel).emit(req.body.eventName, req.body.data);
+
+        }
 
 
         return res.json('Data received')

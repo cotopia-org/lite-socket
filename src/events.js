@@ -11,6 +11,16 @@ const event = (socket) => {
         //     console.log(response)
         // })
     })
+
+
+    socket.on('updateCoordinate', data => {
+        console.log(data)
+
+        //
+        // axiosInstance.get('http://localhost:8000/').then((response) => {
+        //     console.log(response)
+        // })
+    })
 }
 
 
