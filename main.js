@@ -54,6 +54,8 @@ io.on("connection", async (socket) => {
             log('Connected', data.username)
 
 
+            socket.emit('joined', true)
+
             if (data.workspaces.length > 0) {
                 data.workspaces.forEach(w => {
                     socket.join(`workspace-${w.id}`);
@@ -95,7 +97,7 @@ io.on("connection", async (socket) => {
         });
 
 
-        event(socket)
+        event(socket,authToken)
     }
 
 
