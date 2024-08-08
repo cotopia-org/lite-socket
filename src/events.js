@@ -17,6 +17,13 @@ const event = (socket, authToken) => {
 
     socket.on('joinedRoom', data => {
         log('joinedRoom', data)
+
+
+        socket.rooms.forEach(async a => {
+            if (a.contains('room')) {
+                await socket.leave(a)
+            }
+        })
         socket.join(`room-${data}`)
 
 
