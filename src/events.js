@@ -21,8 +21,7 @@ const event = (socket, authToken) => {
 
         socket.rooms.forEach(async a => {
 
-            console.log(a)
-            if (a.contains('room')) {
+            if (a.includes('room')) {
                 await socket.leave(a)
             }
         })
