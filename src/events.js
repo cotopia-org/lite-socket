@@ -20,6 +20,8 @@ const event = (socket, authToken) => {
 
 
         socket.rooms.forEach(async a => {
+
+            console.log(a)
             if (a.contains('room')) {
                 await socket.leave(a)
             }
