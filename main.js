@@ -63,11 +63,10 @@ io.on("connection", async (socket) => {
                 })
 
             }
-            log(data.directs)
 
             if (data.directs.length > 0) {
                 data.directs.forEach(r => {
-                    socket.join(`room-${r.id}`);
+                    socket.join(`direct-${r.id}`);
 
                 })
 
