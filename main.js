@@ -107,7 +107,7 @@ router(app, io, sockets)
 
 
 const disconnected = async (authToken) => {
-    await axiosInstance.get('/disconnected', {'headers': {'Authorization': `Bearer ${authToken}`}})
+    await axiosInstance.get('/disconnected?offline=true', {'headers': {'Authorization': `Bearer ${authToken}`}})
 }
 
 

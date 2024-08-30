@@ -58,6 +58,15 @@ const event = (socket, authToken) => {
     })
 
 
+    socket.on('leaveRoom', () => {
+        log('leaveRoom')
+
+
+        axiosInstance.get('/disconnected', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    })
+
     socket.on("ping", (callback) => {
         callback();
     });
