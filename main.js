@@ -29,7 +29,10 @@ const io = new Server(httpServer, {
 let sockets = {}
 
 io.on("connection", async (socket) => {
+    socket.on("ping", (callback) => {
 
+        callback();
+    });
 
     const authToken = socket.handshake.query.userToken
 

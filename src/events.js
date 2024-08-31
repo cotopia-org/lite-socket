@@ -67,11 +67,7 @@ const event = (socket, authToken) => {
 
     })
 
-    socket.on("ping", (callback) => {
-        log('ping', callback)
 
-        callback();
-    });
 }
 
 
