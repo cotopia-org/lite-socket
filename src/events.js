@@ -50,7 +50,7 @@ const event = (socket, authToken) => {
         log('seenMessage', data)
 
 
-        socket.to('room-' + data.room_id).emit('messageSeen', data);
+        socket.to('room-' + data.room_id).emit('seenMessage', data);
 
         axiosInstance.get('/messages/' + data.message_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
 
