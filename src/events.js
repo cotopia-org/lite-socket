@@ -6,15 +6,73 @@ const event = (socket, authToken) => {
 
 
     socket.on("sendMessage", (data, callback) => {
-        console.log(data); // "world"
 
-
-        // axiosInstance.post('/messages/' + data.message_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
+        log('sendMessage', data)
 
 
         callback(data);
+        socket.to('room-' + data.room_id).emit('messageReceived', data);
+
+        axiosInstance.post('/messages', data, {'headers': {'Authorization': `Bearer ${authToken}`}})
+
     });
 
+    socket.on("pinMessage", (data, callback) => {
+
+        log('pinMessage', data)
+        socket.to('room-' + data.room_id).emit('messagePinned', data);
+        callback(data);
+
+        axiosInstance.get('/messages/' + data.nonce_id + '/pin', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    });
+
+    socket.on("unPinMessage", (data, callback) => {
+
+        log('unPinMessage', data)
+        socket.to('room-' + data.room_id).emit('messageUnPinned', data);
+        callback(data);
+
+        axiosInstance.get('/messages/' + data.nonce_id + '/unPin', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    });
+
+
+    socket.on("deleteMessage", (data, callback) => {
+
+        log('deleteMessage', data)
+        socket.to('room-' + data.room_id).emit('messageDeleted', data);
+        callback(data);
+
+        axiosInstance.delete('/messages/' + data.nonce_id, {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    });
+
+    socket.on('seenMessage', data => {
+        log('seenMessage', data)
+
+
+        socket.to('room-' + data.room_id).emit('messageSeen', data);
+
+        axiosInstance.get('/messages/' + data.nonce_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    })
+    socket.on("updateMessage", (data, callback) => {
+
+        log('updateMessage', data)
+
+
+        callback(data);
+        socket.to('room-' + data.room_id).emit('messageUpdated', data);
+
+        axiosInstance.put('/messages/' + data.nonce_id, data, {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    });
 
     socket.on('joinedRoom', data => {
         log('joinedRoom', data)
@@ -42,18 +100,6 @@ const event = (socket, authToken) => {
         axiosInstance.post('/updateCoordinates', {
             coordinates: data.coordinates,
         }, {'headers': {'Authorization': `Bearer ${authToken}`}})
-
-
-    })
-
-
-    socket.on('seenMessage', data => {
-        log('seenMessage', data)
-
-
-        socket.to('room-' + data.room_id).emit('seenMessage', data);
-
-        axiosInstance.get('/messages/' + data.message_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
 
 
     })
