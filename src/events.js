@@ -5,16 +5,15 @@ import {log} from "../app/logger.js";
 const event = (socket, authToken) => {
 
 
-    socket.on('sendMessage', (data) => {
-        data()
-        console.log(data)
+    socket.on("sendMessage", (data, callback) => {
+        console.log(data); // "world"
 
 
-        //
-        // axiosInstance.get('http://localhost:8000/').then((response) => {
-        //     console.log(response)
-        // })
-    })
+        // axiosInstance.post('/messages/' + data.message_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+        callback(data);
+    });
 
 
     socket.on('joinedRoom', data => {
