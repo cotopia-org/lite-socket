@@ -5,8 +5,10 @@ import {log} from "../app/logger.js";
 const event = (socket, authToken) => {
 
 
-    socket.on('sendMessage', data => {
+    socket.on('sendMessage', (data) => {
+        data()
         console.log(data)
+
 
         //
         // axiosInstance.get('http://localhost:8000/').then((response) => {
