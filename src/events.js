@@ -5,7 +5,7 @@ import {log} from "../app/logger.js";
 const event = (socket, authToken) => {
 
 
-    socket.on('roomMessages', data => {
+    socket.on('sendMessage', data => {
         console.log(data)
 
         //
