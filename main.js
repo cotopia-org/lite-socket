@@ -7,7 +7,7 @@ import router from "./src/router.js";
 import axiosInstance from "./app/axios.js";
 import {log} from "./app/logger.js";
 import cors from 'cors'
-import Sentry from "./app/sentry.js";
+// import Sentry from "./app/sentry.js";
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(cors())
 app.options('*', cors());
 
 
-Sentry.setupExpressErrorHandler(app);
+// Sentry.setupExpressErrorHandler(app);
 
 
 const httpServer = createServer(app);
