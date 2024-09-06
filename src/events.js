@@ -10,7 +10,12 @@ const event = (socket, authToken) => {
         log('sendMessage', data)
 
 
-        callback(data);
+        try {
+            callback(data);
+
+        } catch (e) {
+            log(e)
+        }
         socket.to('room-' + data.room_id).emit('messageReceived', data);
 
         axiosInstance.post('/messages', data, {'headers': {'Authorization': `Bearer ${authToken}`}})
