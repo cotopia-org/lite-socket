@@ -81,7 +81,7 @@ const event = (socket, authToken) => {
 
     });
 
-    socket.on('joinedRoom', data => {
+    socket.on('joinedRoom', (data, cb) => {
         log('joinedRoom', data)
 
 
@@ -95,6 +95,15 @@ const event = (socket, authToken) => {
 
 
         socket.emit('joinedInRoom', true)
+
+
+        try {
+            cb(data);
+
+        } catch (e) {
+            log(e)
+        }
+
 
     })
 
