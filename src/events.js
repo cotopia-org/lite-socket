@@ -24,6 +24,17 @@ const event = (socket, authToken) => {
 
     });
 
+
+    socket.on("isTyping", (data) => {
+
+        log('isTyping', data)
+
+
+        socket.to(data.channel).emit('isTyping', data);
+
+
+    });
+
     socket.on("pinMessage", (data, callback) => {
 
         log('pinMessage', data)
