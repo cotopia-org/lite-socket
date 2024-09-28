@@ -65,27 +65,14 @@ io.on("connection", async (socket) => {
 
             socket.emit('joined', true)
 
-            if (data.workspaces.length > 0) {
-                data.workspaces.forEach(w => {
-                    socket.join(`workspace-${w.id}`);
+            if (data.channels.length > 0) {
+                data.channels.forEach(channel => {
+                    socket.join(channel);
 
                 })
 
             }
 
-            if (data.directs.length > 0) {
-                data.directs.forEach(r => {
-                    socket.join(`direct-${r.id}`);
-
-                })
-
-            }
-
-            if (data.room !== null) {
-                socket.join(`room-${data.room.id}`);
-
-
-            }
 
 
         }).catch(e => {
