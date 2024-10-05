@@ -16,7 +16,7 @@ const event = (socket, authToken) => {
         } catch (e) {
             log(e)
         }
-        socket.to(data.channel).emit('messageReceived', data);
+        socket.to('chat-' + data.chat_id).emit('messageReceived', data);
         log('messageReceived', data)
 
 
@@ -30,7 +30,7 @@ const event = (socket, authToken) => {
         log('isTyping', data)
 
 
-        socket.to(data.channel).emit('isTyping', data);
+        socket.to('chat-' + data.chat_id).emit('isTyping', data);
 
 
     });
@@ -38,7 +38,7 @@ const event = (socket, authToken) => {
     socket.on("pinMessage", (data, callback) => {
 
         log('pinMessage', data)
-        socket.to(data.channel).emit('messagePinned', data);
+        socket.to('chat-' + data.chat_id).emit('messagePinned', data);
         callback(data);
 
         axiosInstance.get('/messages/' + data.nonce_id + '/pin', {'headers': {'Authorization': `Bearer ${authToken}`}})
@@ -49,7 +49,7 @@ const event = (socket, authToken) => {
     socket.on("unPinMessage", (data, callback) => {
 
         log('unPinMessage', data)
-        socket.to(data.channel).emit('messageUnPinned', data);
+        socket.to('chat-' + data.chat_id).emit('messageUnPinned', data);
         callback(data);
 
         axiosInstance.get('/messages/' + data.nonce_id + '/unPin', {'headers': {'Authorization': `Bearer ${authToken}`}})
@@ -61,7 +61,7 @@ const event = (socket, authToken) => {
     socket.on("deleteMessage", (data, callback) => {
 
         log('deleteMessage', data)
-        socket.to(data.channel).emit('messageDeleted', data);
+        socket.to('chat-' + data.chat_id).emit('messageDeleted', data);
         callback(data);
 
         axiosInstance.delete('/messages/' + data.nonce_id, {'headers': {'Authorization': `Bearer ${authToken}`}})
@@ -73,7 +73,7 @@ const event = (socket, authToken) => {
         log('seenMessage', data)
 
 
-        socket.to(data.channel).emit('messageSeen', data);
+        socket.to('chat-' + data.chat_id).emit('messageSeen', data);
 
         axiosInstance.get('/messages/' + data.nonce_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
 
@@ -85,7 +85,7 @@ const event = (socket, authToken) => {
 
 
         callback(data);
-        socket.to(data.channel).emit('messageUpdated', data);
+        socket.to('chat-' + data.chat_id).emit('messageUpdated', data);
 
         axiosInstance.put('/messages/' + data.nonce_id, data, {'headers': {'Authorization': `Bearer ${authToken}`}})
 
@@ -130,9 +130,6 @@ const event = (socket, authToken) => {
 
 
     })
-
-
-
 
 
     socket.on('updateShareScreenCoordinates', data => {
