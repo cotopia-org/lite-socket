@@ -133,10 +133,24 @@ const event = (socket, authToken) => {
 
 
     socket.on('updateShareScreenCoordinates', data => {
-        log('updateCoordinates', data)
+        log('updateShareScreenCoordinates', data)
 
 
         socket.to('room-' + data.room_id).emit('updateShareScreenCoordinates', data);
+
+        // axiosInstance.post('/updateCoordinates', {
+        //     coordinates: data.coordinates,
+        // }, {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+
+    })
+
+
+    socket.on('updateShareScreenSize', data => {
+        log('updateShareScreenSize', data)
+
+
+        socket.to('room-' + data.room_id).emit('updateShareScreenSize', data);
 
         // axiosInstance.post('/updateCoordinates', {
         //     coordinates: data.coordinates,
