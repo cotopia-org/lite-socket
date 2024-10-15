@@ -60,7 +60,9 @@ io.on("connection", async (socket) => {
             const data = res.data.data
 
             const client = await findClient(io, data.id)
-            console.log(client)
+            if (client !== undefined) {
+                client.disconnect()
+            }
             socket.user_id = data.id
             socket.username = data.username
 
