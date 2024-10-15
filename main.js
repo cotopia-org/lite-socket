@@ -27,7 +27,7 @@ const port = process.env.PORT || 3010;
 
 const io = new Server(httpServer, {
     cors: {
-        origin: ["https://admin.socket.io", "https://lite.cotopia.social/", '*'],
+        origin: ["https://admin.socket.io", "https://lite.cotopia.social", '*'],
         credentials: true
     }
 });
