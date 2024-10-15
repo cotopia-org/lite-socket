@@ -60,6 +60,7 @@ io.on("connection", async (socket) => {
 
         const client = await findClient(io, data.id)
         if (client !== undefined) {
+            socket.disconnect()
             client.disconnect()
         }
         socket.user_id = data.id
@@ -72,7 +73,7 @@ io.on("connection", async (socket) => {
         socket.emit('joined', true)
 
         if (data.channels.length > 0) {
-            data.channels.forEach( channel => {
+            data.channels.forEach(channel => {
                 socket.join(channel);
 
             })
