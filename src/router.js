@@ -19,9 +19,14 @@ const router = (router, io, sockets) => {
     router.get('/sockets', (req, res) => {
 
         const data = []
+
+
+        // const clients = io.sockets.clients();
+
         Object.keys(sockets).map(key => {
             data.push({
                 id: sockets[key].user_id,
+                socket_id: sockets[key].id,
                 username: sockets[key].username,
                 rooms: Array.from(sockets[key].rooms),
             })
