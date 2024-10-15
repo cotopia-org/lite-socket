@@ -23,7 +23,7 @@ const router = (router, io, sockets) => {
 
         const clients = await io.sockets.sockets;
         // console.log(clients)
-        clients.map(client => {
+        Array.from(clients).map(client => {
             data.push({
                 id: client.user_id,
                 socket_id: client.id,
