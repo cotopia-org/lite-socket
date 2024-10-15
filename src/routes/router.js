@@ -1,16 +1,20 @@
-import {log} from "../app/logger.js";
+import {log} from "../../packages/logger.js";
+import {findClient, getClients} from "../../packages/utils.js";
 
-const router = (router, io, sockets) => {
+const router = (router, io) => {
     router.get('/', (req, res) => {
         return res.json('Chat is ready')
     })
 
 
-    router.get('/sockets/:userId', (req, res) => {
+    router.get('/sockets/:userId', async (req, res) => {
         const userId = req.params.userId
 
-        if (Object.keys(sockets).includes(userId)) {
-            return res.json(Array.from(sockets[userId].rooms))
+        const client = await findClient(io, userId)
+
+
+        if (client !== undefined) {
+            return res.json(client.rooms)
 
         }
         return res.json('Not Found')
@@ -21,7 +25,7 @@ const router = (router, io, sockets) => {
         const data = []
 
 
-        const clients = await io.fetchSockets();
+        const clients = await getClients(io)
 
 
         clients.map(client => {
@@ -41,9 +45,11 @@ const router = (router, io, sockets) => {
 
             const user_id = req.body.data.user_id
             const room_id = req.body.data.room_id
-            if (Object.keys(sockets).includes(user_id)) {
-                sockets[user_id].join(`room-${room_id}`)
 
+
+            const client = await findClient(io, user_id)
+            if (client !== undefined) {
+                client.join(`room-${room_id}`)
             }
 
 

@@ -2,13 +2,14 @@ import express from "express";
 import {createServer} from "http";
 import {Server} from "socket.io";
 import 'dotenv/config.js'
-import event from "./src/events.js";
-import router from "./src/router.js";
-import axiosInstance from "./app/axios.js";
-import {log} from "./app/logger.js";
+import router from "./src/routes/router.js";
+import axiosInstance from "./packages/axios.js";
+import {log} from "./packages/logger.js";
 import cors from 'cors'
 // import Sentry from "./app/sentry.js";
 import {instrument} from '@socket.io/admin-ui'
+import messagesRegister from "./src/events/messages.js";
+import usersRegister from "./src/events/users.js";
 
 const app = express();
 
@@ -36,7 +37,6 @@ instrument(io, {
     auth: false,
     mode: "development",
 });
-let sockets = {}
 
 io.on("connection", async (socket) => {
     socket.on("ping", (callback) => {
@@ -61,7 +61,6 @@ io.on("connection", async (socket) => {
 
             socket.user_id = data.id
             socket.username = data.username
-            sockets[res.data.data.id] = socket
 
 
             log('Connected', data.username)
@@ -90,19 +89,18 @@ io.on("connection", async (socket) => {
             log('Disconnected', socket.username)
             disconnected(authToken)
 
-            delete sockets[socket.user_id]
-
 
         });
 
 
-        event(socket, authToken)
+        messagesRegister(socket, authToken)
+        usersRegister(socket, authToken)
     }
 
 
 })
 
-router(app, io, sockets)
+router(app, io)
 
 
 const disconnected = async (authToken) => {
