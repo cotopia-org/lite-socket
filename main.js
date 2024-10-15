@@ -10,6 +10,7 @@ import cors from 'cors'
 import {instrument} from '@socket.io/admin-ui'
 import messagesRegister from "./src/events/messages.js";
 import usersRegister from "./src/events/users.js";
+import {findClient} from "./packages/utils.js";
 
 const app = express();
 
@@ -58,7 +59,8 @@ io.on("connection", async (socket) => {
 
             const data = res.data.data
 
-
+            const client = await findClient(io, data.id)
+            console.log(client)
             socket.user_id = data.id
             socket.username = data.username
 
