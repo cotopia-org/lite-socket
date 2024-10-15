@@ -23,12 +23,12 @@ const router = (router, io, sockets) => {
 
         const clients = await io.sockets.sockets;
         // console.log(clients)
-        Object.keys(clients).map(key => {
+        clients.map(client => {
             data.push({
-                id: sockets[key].user_id,
-                socket_id: sockets[key].id,
-                username: sockets[key].username,
-                rooms: Array.from(sockets[key].rooms),
+                id: client.user_id,
+                socket_id: client.id,
+                username: client.username,
+                rooms: Array.from(client.rooms),
             })
         })
 
