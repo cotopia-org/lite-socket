@@ -8,6 +8,7 @@ import axiosInstance from "./app/axios.js";
 import {log} from "./app/logger.js";
 import cors from 'cors'
 // import Sentry from "./app/sentry.js";
+import {instrument} from '@socket.io/admin-ui'
 
 const app = express();
 
@@ -26,12 +27,15 @@ const port = process.env.PORT || 3010;
 
 const io = new Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: ["https://admin.socket.io", "*"],
         credentials: true
     }
 });
 
-
+instrument(io, {
+    auth: false,
+    mode: "development",
+});
 let sockets = {}
 
 io.on("connection", async (socket) => {
@@ -72,7 +76,6 @@ io.on("connection", async (socket) => {
                 })
 
             }
-
 
 
         }).catch(e => {
