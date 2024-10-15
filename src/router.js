@@ -21,7 +21,7 @@ const router = (router, io, sockets) => {
         const data = []
 
 
-        const clients = io.sockets.clients();
+        const clients = io.sockets.sockets;
         console.log(clients)
         Object.keys(sockets).map(key => {
             data.push({
