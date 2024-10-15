@@ -52,41 +52,32 @@ io.on("connection", async (socket) => {
 
         socket.disconnect()
     } else {
-        await axiosInstance.post('/connected', {
+        const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}}).then(async res => {
+        }, {'headers': {'Authorization': `Bearer ${authToken}`}});
+
+        const data = connectedResponse.data.data
+
+        const client = await findClient(io, data.id)
+        if (client !== undefined) {
+            client.disconnect()
+        }
+        socket.user_id = data.id
+        socket.username = data.username
 
 
-            const data = res.data.data
-
-            const client = await findClient(io, data.id)
-            if (client !== undefined) {
-                client.disconnect()
-            }
-            socket.user_id = data.id
-            socket.username = data.username
+        log('Connected', data.username)
 
 
-            log('Connected', data.username)
+        socket.emit('joined', true)
 
+        if (data.channels.length > 0) {
+            data.channels.forEach( channel => {
+                socket.join(channel);
 
-            socket.emit('joined', true)
+            })
 
-            if (data.channels.length > 0) {
-                data.channels.forEach(channel => {
-                    socket.join(channel);
-
-                })
-
-            }
-
-
-        }).catch(e => {
-            log('Error', e)
-            log('Error', e.message)
-            socket.disconnect()
-
-        })
+        }
 
 
         socket.on("disconnect", () => {
