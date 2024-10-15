@@ -16,19 +16,17 @@ const router = (router, io, sockets) => {
         return res.json('Not Found')
 
     })
-    router.get('/sockets', (req, res) => {
+    router.get('/sockets', async (req, res) => {
 
         const data = []
 
 
-        const clients = io.sockets.sockets;
-        console.log(clients)
-        Object.keys(sockets).map(key => {
+        const clients = await io.fetchSockets();
+
+
+        clients.map(client => {
             data.push({
-                id: sockets[key].user_id,
-                socket_id: sockets[key].id,
-                username: sockets[key].username,
-                rooms: Array.from(sockets[key].rooms),
+                id: client.user_id, socket_id: client.id, username: client.username, rooms: Array.from(client.rooms),
             })
         })
 
