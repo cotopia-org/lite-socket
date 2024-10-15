@@ -22,8 +22,8 @@ const router = (router, io, sockets) => {
 
 
         const clients = io.sockets.sockets;
-        console.log(clients)
-        Object.keys(sockets).map(key => {
+        // console.log(clients)
+        Object.keys(clients).map(key => {
             data.push({
                 id: sockets[key].user_id,
                 socket_id: sockets[key].id,
