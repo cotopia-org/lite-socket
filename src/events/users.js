@@ -20,12 +20,8 @@ export default function usersRegister(socket, authToken) {
         socket.emit('joinedInRoom', true)
 
 
-        try {
-            cb(data);
+        cb(data);
 
-        } catch (e) {
-            log(e)
-        }
 
 
     })
