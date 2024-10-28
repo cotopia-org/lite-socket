@@ -39,7 +39,7 @@ const router = (router, io) => {
 
     router.post('/emit', async (req, res) => {
 
-
+return 'ok';
         log(req.body)
 
         io.to(req.body.channel).emit(req.body.eventName, req.body.data);
@@ -53,8 +53,9 @@ const router = (router, io) => {
 
     router.post('/joinToRoom', async (req, res) => {
 
+        // return 'ok';
 
-        log(req.body)
+        log('User Joined',req.body)
         const user_id = req.body.data.user_id
         const room_id = req.body.data.room_id
 

@@ -10,7 +10,14 @@ import messagesRegister from "./src/events/messages.js";
 import usersRegister from "./src/events/users.js";
 import {findClient} from "./packages/utils.js";
 
+import redis from 'redis'
+import listener from "./src/listeners/listeners.js";
+
 const app = express();
+
+const redisClient = redis.createClient()
+
+redisClient.connect();
 
 
 app.use(express.json());
@@ -86,11 +93,14 @@ io.on("connection", async (socket) => {
 
         messagesRegister(socket, authToken)
         usersRegister(socket, authToken)
+
+
+
     }
 
 
 })
-
+listener(redisClient,io)
 router(app, io)
 
 
