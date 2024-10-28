@@ -41,26 +41,44 @@ const router = (router, io) => {
 
 
         log(req.body)
-        if (req.body.eventName === 'joinedRoom') {
 
-            const user_id = req.body.data.user_id
-            const room_id = req.body.data.room_id
+        io.to(req.body.channel).emit(req.body.eventName, req.body.data);
 
-
-            const client = await findClient(io, user_id)
-            if (client !== undefined) {
-                client.join(`room-${room_id}`)
-            }
-
-
-        } else {
-            io.to(req.body.channel).emit(req.body.eventName, req.body.data);
-
-        }
 
 
         return res.json('Data received')
     })
+
+
+
+    router.post('/joinToRoom', async (req, res) => {
+
+
+        log(req.body)
+        const user_id = req.body.data.user_id
+        const room_id = req.body.data.room_id
+
+
+        const client = await findClient(io, user_id)
+        if (client !== undefined) {
+
+
+
+
+            for (const room of client.rooms) {
+
+                if (room.includes('room')) {
+                    await client.leave(room)
+                }
+            }
+
+            client.join(`tester-${room_id}`)
+        }
+
+
+        return res.json('User Joined')
+    })
+
 }
 
 

@@ -6,8 +6,6 @@ import router from "./src/routes/router.js";
 import axiosInstance from "./packages/axios.js";
 import {log} from "./packages/logger.js";
 import cors from 'cors'
-// import Sentry from "./app/sentry.js";
-import {instrument} from '@socket.io/admin-ui'
 import messagesRegister from "./src/events/messages.js";
 import usersRegister from "./src/events/users.js";
 import {findClient} from "./packages/utils.js";
@@ -34,10 +32,7 @@ const io = new Server(httpServer, {
     }
 });
 
-instrument(io, {
-    auth: false,
-    mode: "development",
-});
+
 
 io.on("connection", async (socket) => {
     socket.on("ping", (callback) => {
