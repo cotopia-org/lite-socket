@@ -10,7 +10,7 @@ const listener = (redisClient,io)=>{
 
         log(data)
 
-        io.to(data.channel).emit(channel, data.data);
+        io.to(data.channel).emit(data.eventName, data.data);
 
 
 
