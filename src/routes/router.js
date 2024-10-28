@@ -72,7 +72,7 @@ const router = (router, io) => {
                 }
             }
 
-            client.join(`tester-${room_id}`)
+            client.join(`room-${room_id}`)
         }
 
 
