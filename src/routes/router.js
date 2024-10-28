@@ -39,7 +39,6 @@ const router = (router, io) => {
 
     router.post('/emit', async (req, res) => {
 
-return 'ok';
         log(req.body)
 
         io.to(req.body.channel).emit(req.body.eventName, req.body.data);

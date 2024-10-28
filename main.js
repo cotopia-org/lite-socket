@@ -100,7 +100,7 @@ io.on("connection", async (socket) => {
 
 
 })
-listener(redisClient,io)
+// listener(redisClient,io)
 router(app, io)
 
 
