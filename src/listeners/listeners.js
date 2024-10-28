@@ -8,7 +8,7 @@ const listener = (redisClient,io)=>{
 
 
 
-        log(data)
+        log(JSON.parse(data.data))
 
         io.to(data.channel).emit(channel, JSON.parse(data.data));
 
