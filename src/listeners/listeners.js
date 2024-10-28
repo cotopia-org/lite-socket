@@ -3,7 +3,7 @@ import {findClient, getClients} from "../../packages/utils.js";
 
 
 const listener = (redisClient,io)=>{
-    redisClient.pSubscribe("*", function (data, channel) {
+    redisClient.pSubscribe("test-channel", function (data, channel) {
         console.log('Got message from ' + channel,data);
 
 
