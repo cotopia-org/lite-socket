@@ -2,16 +2,16 @@ import {log} from "../../packages/logger.js";
 import {findClient, getClients} from "../../packages/utils.js";
 
 
-const listener = (redisClient,io)=>{
+const listener = (redisClient, io) => {
     redisClient.pSubscribe("lite-redis-test-channel", function (data, channel) {
-        console.log('Got message from ' + channel,data);
+        console.log('Got message from ' + channel, data);
+
+        const msg = JSON.parse(data);
 
 
+        log(msg)
 
-        log(data)
-
-        io.to(data.channel).emit(data.eventName, data.data);
-
+        io.to(msg.channel).emit(msg.eventName, msg.data);
 
 
     });
