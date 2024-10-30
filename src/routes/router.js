@@ -38,31 +38,27 @@ const router = (router, io) => {
     })
 
     router.post('/emit', async (req, res) => {
-        return ;
+        return 'ok';
         log(req.body)
 
         io.to(req.body.channel).emit(req.body.eventName, req.body.data);
-
 
 
         return res.json('Data received')
     })
 
 
-
     router.post('/joinToRoom', async (req, res) => {
 
-        // return 'ok';
+        return 'ok';
 
-        log('User Joined',req.body)
+        log('User Joined', req.body)
         const user_id = req.body.data.user_id
         const room_id = req.body.data.room_id
 
 
         const client = await findClient(io, user_id)
         if (client !== undefined) {
-
-
 
 
             for (const room of client.rooms) {

@@ -14,6 +14,35 @@ const listener = (redisClient, io) => {
 
 
     });
+
+
+    redisClient.pSubscribe("lite-redis-joined", async function (data) {
+
+        const msg = JSON.parse(data);
+
+
+        const user_id = msg.user_id
+        const room_id = msg.room_id
+
+
+        const client = await findClient(io, user_id)
+        if (client !== undefined) {
+
+
+
+
+            for (const room of client.rooms) {
+
+                if (room.includes('room')) {
+                    await client.leave(room)
+                }
+            }
+
+            client.join(`room-${room_id}`)
+        }
+
+
+    });
 }
 
 
