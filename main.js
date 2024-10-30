@@ -40,7 +40,6 @@ const io = new Server(httpServer, {
 });
 
 
-
 io.on("connection", async (socket) => {
     socket.on("ping", (callback) => {
 
@@ -54,33 +53,33 @@ io.on("connection", async (socket) => {
 
         socket.disconnect()
     } else {
-        const connectedResponse = await axiosInstance.post('/connected', {
+        axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}});
+        }, {'headers': {'Authorization': `Bearer ${authToken}`}}).then(async res => {
+            const data = res.data.data
 
-        const data = connectedResponse.data.data
-
-        const client = await findClient(io, data.id)
-        if (client !== undefined) {
-            socket.disconnect()
-            client.disconnect()
-        }
-        socket.user_id = data.id
-        socket.username = data.username
-
-
-        log('Connected', data.username)
+            const client = await findClient(io, data.id)
+            if (client !== undefined) {
+                socket.disconnect()
+                client.disconnect()
+            }
+            socket.user_id = data.id
+            socket.username = data.username
 
 
-        socket.emit('joined', true)
+            log('Connected', data.username)
 
-        if (data.channels.length > 0) {
-            data.channels.forEach(channel => {
-                socket.join(channel);
 
-            })
+            socket.emit('joined', true)
 
-        }
+            if (data.channels.length > 0) {
+                data.channels.forEach(channel => {
+                    socket.join(channel);
+
+                })
+
+            }
+        });
 
 
         socket.on("disconnect", () => {
@@ -93,7 +92,6 @@ io.on("connection", async (socket) => {
 
         messagesRegister(socket, authToken)
         usersRegister(socket, authToken)
-
 
 
     }
