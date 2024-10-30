@@ -53,33 +53,33 @@ io.on("connection", async (socket) => {
 
         socket.disconnect()
     } else {
-        axiosInstance.post('/connected', {
+        const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}}).then(async res => {
-            const data = res.data.data
+        }, {'headers': {'Authorization': `Bearer ${authToken}`}});
 
-            const client = await findClient(io, data.id)
-            if (client !== undefined) {
-                socket.disconnect()
-                client.disconnect()
-            }
-            socket.user_id = data.id
-            socket.username = data.username
+        const data = connectedResponse.data.data
 
-
-            log('Connected', data.username)
+        const client = await findClient(io, data.id)
+        if (client !== undefined) {
+            socket.disconnect()
+            client.disconnect()
+        }
+        socket.user_id = data.id
+        socket.username = data.username
 
 
-            socket.emit('joined', true)
+        log('Connected', data.username)
 
-            if (data.channels.length > 0) {
-                data.channels.forEach(channel => {
-                    socket.join(channel);
 
-                })
+        socket.emit('joined', true)
 
-            }
-        });
+        if (data.channels.length > 0) {
+            data.channels.forEach(channel => {
+                socket.join(channel);
+
+            })
+
+        }
 
 
         socket.on("disconnect", () => {
@@ -98,7 +98,7 @@ io.on("connection", async (socket) => {
 
 
 })
-listener(redisClient,io)
+listener(redisClient, io)
 router(app, io)
 
 
