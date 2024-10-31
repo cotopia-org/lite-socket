@@ -61,7 +61,7 @@ io.on("connection", async (socket) => {
 
         const client = await findClient(io, data.id)
         if (client !== undefined) {
-            socket.disconnect()
+            // socket.disconnect()
             client.disconnect()
         }
         socket.user_id = data.id
