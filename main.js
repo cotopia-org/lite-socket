@@ -1,27 +1,30 @@
 import express from "express";
-import {createServer} from "http";
-import {Server} from "socket.io";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import 'dotenv/config.js'
 import router from "./src/routes/router.js";
 import axiosInstance from "./packages/axios.js";
-import {log} from "./packages/logger.js";
+import { log } from "./packages/logger.js";
 import cors from 'cors'
 import messagesRegister from "./src/events/messages.js";
 import usersRegister from "./src/events/users.js";
-import {findClient} from "./packages/utils.js";
+import { findClient } from "./packages/utils.js";
 
 import redis from 'redis'
 import listener from "./src/listeners/listeners.js";
 
 const app = express();
 
-const redisClient = redis.createClient()
-
+const redisClient = redis.createClient({
+    socket: {
+        host: process.env.REDIS_HOST || "localhost",
+        port: process.env.REDIS_PORT || "6379",
+    }
+});
 redisClient.connect();
 
-
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 app.options('*', cors());
 
@@ -55,7 +58,7 @@ io.on("connection", async (socket) => {
     } else {
         const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}});
+        }, { 'headers': { 'Authorization': `Bearer ${authToken}` } });
 
         const data = connectedResponse.data.data
 
@@ -103,7 +106,7 @@ router(app, io)
 
 
 const disconnected = async (authToken) => {
-    await axiosInstance.get('/disconnected?offline=true', {'headers': {'Authorization': `Bearer ${authToken}`}})
+    await axiosInstance.get('/disconnected?offline=true', { 'headers': { 'Authorization': `Bearer ${authToken}` } })
 }
 
 
