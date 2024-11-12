@@ -58,7 +58,7 @@ io.on("connection", async (socket) => {
     } else {
         const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, { 'headers': { 'Authorization': `Bearer ${authToken}` } });
+        }, { 'headers': { 'Authorization': `Bearer ${authToken}`} });
 
         const data = connectedResponse.data.data
 

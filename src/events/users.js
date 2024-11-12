@@ -3,7 +3,15 @@ import {log} from "../../packages/logger.js";
 
 export default function usersRegister(socket, authToken) {
 
+    function sendRequest(method,url,data,token = authToken,socket_id = socket.id){
 
+        axiosInstance.request({
+            url:url,
+            method:method,
+            data:data,
+            headers:{'Authorization': `Bearer ${token}`,'Socket-Id':socket_id}
+        })
+    }
     socket.on('joinedRoom', (data, cb) => {
         log('joinedRoom', data)
 
@@ -32,9 +40,10 @@ export default function usersRegister(socket, authToken) {
 
         socket.to('room-' + data.room_id).emit('updateCoordinates', data);
 
-        axiosInstance.post('/updateCoordinates', {
+
+        sendRequest('post','/updateCoordinates',{
             coordinates: data.coordinates,
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}})
+        },)
 
 
     })
