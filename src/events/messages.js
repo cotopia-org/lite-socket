@@ -4,6 +4,11 @@ import {log} from "../../packages/logger.js";
 
 export default function messagesRegister(socket, authToken) {
 
+    function sendRequest(method,url,data){
+
+        axiosInstance[method](url, data, {'headers': {'Authorization': `Bearer ${authToken}`,'Socket-Id':socket.id}})
+
+    }
 
     socket.on("sendMessage", (data, callback) => {
 
@@ -20,7 +25,7 @@ export default function messagesRegister(socket, authToken) {
         log('messageReceived', data)
 
 
-        axiosInstance.post('/messages', data, {'headers': {'Authorization': `Bearer ${authToken}`}})
+        sendRequest('post','/messages',data)
 
     });
 
@@ -41,7 +46,10 @@ export default function messagesRegister(socket, authToken) {
         socket.to('chat-' + data.chat_id).emit('messagePinned', data);
         callback(data);
 
-        axiosInstance.get('/messages/' + data.nonce_id + '/pin', {'headers': {'Authorization': `Bearer ${authToken}`}})
+
+        sendRequest('get','/messages/' + data.nonce_id + '/pin')
+
+
 
 
     });
@@ -52,7 +60,8 @@ export default function messagesRegister(socket, authToken) {
         socket.to('chat-' + data.chat_id).emit('messageUnPinned', data);
         callback(data);
 
-        axiosInstance.get('/messages/' + data.nonce_id + '/unPin', {'headers': {'Authorization': `Bearer ${authToken}`}})
+        sendRequest('get','/messages/' + data.nonce_id + '/unPin')
+
 
 
     });
@@ -64,7 +73,7 @@ export default function messagesRegister(socket, authToken) {
         socket.to('chat-' + data.chat_id).emit('messageDeleted', data);
         callback(data);
 
-        axiosInstance.delete('/messages/' + data.nonce_id, {'headers': {'Authorization': `Bearer ${authToken}`}})
+        sendRequest('delete','/messages/' + data.nonce_id )
 
 
     });
@@ -75,7 +84,7 @@ export default function messagesRegister(socket, authToken) {
 
         socket.to('chat-' + data.chat_id).emit('messageSeen', data);
 
-        axiosInstance.get('/messages/' + data.nonce_id + '/seen', {'headers': {'Authorization': `Bearer ${authToken}`}})
+        sendRequest('get','/messages/' + data.nonce_id + '/seen')
 
 
     })
@@ -87,7 +96,7 @@ export default function messagesRegister(socket, authToken) {
         callback(data);
         socket.to('chat-' + data.chat_id).emit('messageUpdated', data);
 
-        axiosInstance.put('/messages/' + data.nonce_id, data, {'headers': {'Authorization': `Bearer ${authToken}`}})
+        sendRequest('put','/messages/' + data.nonce_id,data)
 
 
     });
