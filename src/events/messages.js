@@ -5,7 +5,7 @@ import {log} from "../../packages/logger.js";
 export default function messagesRegister(socket, authToken) {
 
     function sendRequest(method,url,data){
-
+console.log(authToken)
         axiosInstance[method](url, data, {'headers': {'Authorization': `Bearer ${authToken}`,'Socket-Id':socket.id}})
 
     }
