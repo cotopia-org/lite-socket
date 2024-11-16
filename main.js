@@ -88,7 +88,7 @@ io.on("connection", async (socket) => {
 
         socket.on("disconnect", () => {
             log('Disconnected', socket.username)
-            disconnected(authToken)
+            disconnected(authToken,socket.id)
 
 
         });
@@ -106,8 +106,8 @@ listener(redisClient, io)
 router(app, io)
 
 
-const disconnected = async (authToken) => {
-    await axiosInstance.get('/disconnected?offline=true', { 'headers': { 'Authorization': `Bearer ${authToken}` } })
+const disconnected = async (authToken,socket_id) => {
+    await axiosInstance.get('/disconnected?offline=true', { 'headers': { 'Authorization': `Bearer ${authToken}`,'Socket-Id':socket_id } })
 }
 
 
