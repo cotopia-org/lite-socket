@@ -65,11 +65,11 @@ io.on("connection", async (socket) => {
         const client = await findClient(io, data.id)
         if (client !== undefined) {
             // socket.disconnect()
-            client.status = 'deactive'
+            client.status = 'disable'
         }
         socket.user_id = data.id
         socket.username = data.username
-        socket.status = 'active'
+        socket.status = 'enable'
 
 
         log('Connected', data.username)
@@ -88,7 +88,10 @@ io.on("connection", async (socket) => {
 
         socket.on("disconnect", () => {
             log('Disconnected', socket.username)
-            disconnected(authToken,socket.id)
+            if (socket.status ==='enable'){
+                disconnected(authToken,socket.id)
+
+            }
 
 
         });
