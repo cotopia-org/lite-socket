@@ -56,29 +56,32 @@ io.on("connection", async (socket) => {
 
         socket.disconnect()
     } else {
+
+
+
+
         const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
         }, { 'headers': { 'Authorization': `Bearer ${authToken}`} });
+        const connectedResponseData = connectedResponse.data.data
 
-        const data = connectedResponse.data.data
-
-        const client = await findClient(io, data.id)
+        const client = await findClient(io, connectedResponseData.id)
         if (client !== undefined) {
-            // socket.disconnect()
             client.status = 'disable'
         }
-        socket.user_id = data.id
-        socket.username = data.username
+        socket.user_id = connectedResponseData.id
+        socket.username = connectedResponseData.username
         socket.status = 'enable'
 
-
-        log('Connected', data.username)
+        log('Connected', connectedResponseData.username)
 
 
         socket.emit('joined', true)
 
-        if (data.channels.length > 0) {
-            data.channels.forEach(channel => {
+
+
+        if (connectedResponseData.channels.length > 0) {
+            connectedResponseData.channels.forEach(channel => {
                 socket.join(channel);
 
             })
@@ -88,10 +91,8 @@ io.on("connection", async (socket) => {
 
         socket.on("disconnect", () => {
             log('Disconnected', socket.username)
-            if (socket.status ==='enable'){
-                disconnected(authToken,socket.id)
+            disconnected(authToken,socket.id,socket.status)
 
-            }
 
 
         });
@@ -109,8 +110,8 @@ listener(redisClient, io)
 router(app, io)
 
 
-const disconnected = async (authToken,socket_id) => {
-    await axiosInstance.get('/disconnected?offline=true', { 'headers': { 'Authorization': `Bearer ${authToken}`,'Socket-Id':socket_id } })
+const disconnected = async (authToken,socket_id,socket_status) => {
+    await axiosInstance.get('/disconnected?offline=true&socket_status='+socket_status, { 'headers': { 'Authorization': `Bearer ${authToken}`,'Socket-Id':socket_id } })
 }
 
 
