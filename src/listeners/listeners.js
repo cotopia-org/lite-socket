@@ -29,8 +29,6 @@ const listener = (redisClient, io) => {
         if (client !== undefined) {
 
 
-
-
             for (const room of client.rooms) {
 
                 if (room.includes('room')) {
@@ -39,6 +37,25 @@ const listener = (redisClient, io) => {
             }
 
             client.join(`room-${room_id}`)
+        }
+
+
+    });
+
+    redisClient.pSubscribe("lite-redis-chat-created", async function (data) {
+
+        const msg = JSON.parse(data);
+
+
+        const user_id = msg.user_id
+        const chat_id = msg.chat_id
+
+
+        const client = await findClient(io, user_id)
+        if (client !== undefined) {
+
+
+            client.join(`chat-${chat_id}`)
         }
 
 
