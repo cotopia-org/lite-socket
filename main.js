@@ -60,6 +60,7 @@ io.on("connection", async (socket) => {
     } else {
 
 
+        //TODO instead of this request must use JWT token to determine channels of user.
         axiosInstance.post('/connected', {
             socket_id: socket.id
         }, {'headers': {'Authorization': `Bearer ${authToken}`}}).then(res => {
@@ -108,7 +109,7 @@ listener(redisClient, io)
 router(app, io)
 
 
-const disconnected = async (authToken, socket_id, socket_status) => {
+const disconnected = (authToken, socket_id, socket_status) => {
 
     const now = new Date();
 
@@ -125,7 +126,7 @@ const disconnected = async (authToken, socket_id, socket_status) => {
     // Combine into desired format
     const nowStr = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    await axiosInstance.get('/disconnected?offline=true&socket_status=' + socket_status + '&now=' + nowStr, {
+    axiosInstance.get('/disconnected?offline=true&socket_status=' + socket_status + '&now=' + nowStr, {
         'headers': {
             'Authorization': `Bearer ${authToken}`,
             'Socket-Id': socket_id
