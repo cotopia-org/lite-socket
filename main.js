@@ -68,6 +68,7 @@ io.on("connection", async (socket) => {
 
             socket.emit('joined', true)
 
+            log('Connected', username)
 
             if (data.channels.length > 0) {
                 data.channels.forEach(channel => {
@@ -85,8 +86,6 @@ io.on("connection", async (socket) => {
         socket.user_id = id
         socket.username = username
         socket.status = 'enable'
-
-        log('Connected', username)
 
 
         socket.on("disconnect", () => {
