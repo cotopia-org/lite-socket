@@ -50,6 +50,8 @@ io.on("connection", async (socket) => {
     });
 
     const authToken = socket.handshake.query.userToken
+    const id = socket.handshake.query.id
+    const username = socket.handshake.query.username
 
     if (authToken === undefined) {
         log('Disconnected, for no authToken')
@@ -57,6 +59,7 @@ io.on("connection", async (socket) => {
         socket.disconnect()
     } else {
 
+        console.log(id, username)
 
         const connectedResponse = await axiosInstance.post('/connected', {
             socket_id: socket.id
