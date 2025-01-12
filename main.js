@@ -59,34 +59,34 @@ io.on("connection", async (socket) => {
         socket.disconnect()
     } else {
 
-        console.log(id, username)
 
-        const connectedResponse = await axiosInstance.post('/connected', {
+        axiosInstance.post('/connected', {
             socket_id: socket.id
-        }, {'headers': {'Authorization': `Bearer ${authToken}`}});
-        const connectedResponseData = connectedResponse.data.data
+        }, {'headers': {'Authorization': `Bearer ${authToken}`}}).then(res => {
+            const data = res.data.data
 
-        const client = await findClient(io, connectedResponseData.id)
+
+            socket.emit('joined', true)
+
+
+            if (data.channels.length > 0) {
+                data.channels.forEach(channel => {
+                    socket.join(channel);
+
+                })
+
+            }
+        });
+
+        const client = await findClient(io, id)
         if (client !== undefined) {
             client.status = 'disable'
         }
-        socket.user_id = connectedResponseData.id
-        socket.username = connectedResponseData.username
+        socket.user_id = id
+        socket.username = username
         socket.status = 'enable'
 
-        log('Connected', connectedResponseData.username)
-
-
-        socket.emit('joined', true)
-
-
-        if (connectedResponseData.channels.length > 0) {
-            connectedResponseData.channels.forEach(channel => {
-                socket.join(channel);
-
-            })
-
-        }
+        log('Connected', username)
 
 
         socket.on("disconnect", () => {
