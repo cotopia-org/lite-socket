@@ -53,7 +53,7 @@ io.on("connection", async (socket) => {
     const id = socket.handshake.query.id
     const username = socket.handshake.query.username
 
-    if (authToken === undefined) {
+    if (authToken === undefined || id === undefined || username === undefined) {
         log('Disconnected, for no authToken')
 
         socket.disconnect()
