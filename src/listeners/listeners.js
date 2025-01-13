@@ -24,13 +24,13 @@ const listener = (redisClient, io) => {
         const socket_id = msg.socket_id
         const room_id = msg.room_id
 
-        console.log(msg)
+        console.log('Here1')
 
         const client = await findClientBySocketId(io, socket_id)
-        console.log(client, 'client')
 
         if (client !== undefined) {
 
+            console.log('Here2')
 
             for (const room of client.rooms) {
 
