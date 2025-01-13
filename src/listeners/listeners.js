@@ -27,6 +27,7 @@ const listener = (redisClient, io) => {
 
         const client = await findClient(io, user_id)
         if (client !== undefined) {
+            console.log('Here')
 
 
             for (const room of client.rooms) {
