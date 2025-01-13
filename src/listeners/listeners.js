@@ -1,5 +1,5 @@
 import {log} from "../../packages/logger.js";
-import {findClient, getClients} from "../../packages/utils.js";
+import {findClient, findClientBySocketId, getClients} from "../../packages/utils.js";
 
 
 const listener = (redisClient, io) => {
@@ -21,14 +21,15 @@ const listener = (redisClient, io) => {
         const msg = JSON.parse(data);
 
 
-        const user_id = msg.user_id
+        const socket_id = msg.socket_id
         const room_id = msg.room_id
-        console.log('Here1')
 
+        console.log(msg)
 
-        const client = await findClient(io, user_id)
+        const client = await findClientBySocketId(io, socket_id)
+        console.log(client, 'client')
+
         if (client !== undefined) {
-            console.log('Here2')
 
 
             for (const room of client.rooms) {
