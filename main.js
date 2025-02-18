@@ -83,6 +83,8 @@ io.on("connection", async (socket) => {
         const client = await findClient(io, id)
         if (client !== undefined) {
             client.status = 'disable'
+            io.to(client.id).emit('duplicate', true)
+
         }
         socket.user_id = id
         socket.username = username
